@@ -1,5 +1,13 @@
 #include "LED.h"
 
+#define RED			BIT0
+#define GREEN 	    BIT1
+#define BLUE		BIT2
+#define CYAN		(GREEN|BLUE)
+#define MAGENTA     (RED|BLUE)
+#define YELLOW	    (RED|GREEN)
+#define WHITE		(RED|GREEN|BLUE)
+
 void LED1_Init(void) {
     P1->SEL0 &= ~BIT0;
     P1->SEL1 &= ~BIT0;
