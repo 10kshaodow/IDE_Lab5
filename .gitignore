@@ -1,0 +1,14 @@
+# Ignore build output folders:
+Listings/
+Objects/
+RTE/
+
+# Ignore user-specific Keil config files:
+*.uvguix.*
+*.uvoptx
+
+# (Optional) If you want to ignore the .uvprojx file too:
+# *.uvprojx
+#
+# But usually you keep the .uvprojx so others can open the project.
+# Similarly, keep or remove lines depending on what you want in Git.
