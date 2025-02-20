@@ -105,6 +105,39 @@ BYTE uart0_getchar(){
 
 }
 
+void uart0_putnumU(int i){ //designed to only take a single digit, must be used in loop for large numbers.
+	char ch;
+	if (i >= 0 && i <= 9) {
+        ch = i + '0';  // the ASCII value for any digit is simply 48('0') + digit
+    } else {
+        ch = '?';  // Placeholder for non-digit values
+    }
+	
+	// Wait until transmission of previous bit is complete 
+	// IFG register
+	while(!((EUSCI_A0 -> IFG) & BIT1)) { 
+        // Busy-wait loop for UCTXIFG bit to be set (indicates UART is not busy)
+    }
+	 EUSCI_A0 -> TXBUF = ch; // Load the character into the TX buffer
+
+	}
+void uart2_putnumU(int i){ //designed to only take a single digit, must be used in loop for large numbers.
+	char ch;
+	if (i >= 0 && i <= 9) {
+        ch = i + '0';  // the ASCII value for any digit is simply 48('0') + digit
+    } else {
+        ch = '?';  // Placeholder for non-digit values
+    }
+	
+	// Wait until transmission of previous bit is complete 
+	// IFG register
+	while(!((EUSCI_A2 -> IFG) & BIT1)) { 
+        // Busy-wait loop for UCTXIFG bit to be set (indicates UART is not busy)
+    }
+	 EUSCI_A2 -> TXBUF = ch; // Load the character into the TX buffer
+
+	}
+
 BYTE uart2_getchar(){
 	BYTE inChar;
 	// Wait for data
