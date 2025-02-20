@@ -13,15 +13,25 @@
 #include "msp.h"
 #include "uart.h"
 #include "switches.h"
-#include "leds.h"
+#include "led.h"
 #include "Timer32.h"
 #include "CortexM.h"
 #include "Common.h"
+
+#define RED			BIT0
+#define GREEN 	    BIT1
+#define BLUE		BIT2
+#define CYAN		(GREEN|BLUE)
+#define MAGENTA     (RED|BLUE)
+#define YELLOW	    (RED|GREEN)
+#define WHITE		(RED|GREEN|BLUE)
+
 extern uint32_t SystemCoreClock;
 
 // these are not used by the timer
-BOOLEAN g_sendData = FALSE;
+
 uint16_t line[128];
+BOOLEAN g_sendData = FALSE;
 
 int colorIndex = 0;
 BYTE colors[7] = { RED, GREEN, BLUE, CYAN, MAGENTA, YELLOW, WHITE };
@@ -118,24 +128,33 @@ void PORT1_IRQHandler(void)
 {
 	float numSeconds = 0.0;
 	char temp[32];
+	
 
 	// First we check if it came from Switch1 ?
   if(P1->IFG & BIT1)  // we start a timer to toggle the LED1 1 second ON and 1 second OFF
 	{
 		// acknowledge P1.1 is pressed, by setting BIT1 to zero - remember P1.1 is switch 1
 		// clear flag, acknowledge
-    ;     
-
+    P1->IFG &= ~BIT1; // clear interrupt flag
+    //start timer
+		//
+		
+		if(Timer1RunningFlag == FALSE){
+			Timer1RunningFlag = TRUE;
+			
+		}else{
+			Timer1RunningFlag = FALSE;
 
   }
 	// Now check to see if it came from Switch2 ?
   if(P1->IFG & BIT4)
 	{
 		// acknowledge P1.4 is pressed, by setting BIT4 to zero - remember P1.4 is switch 2
-    ;     // clear flag4, acknowledge
-
+    // clear flag4, acknowledge
+		P1->IFG &= ~BIT4; // clear interrupt flag
   }
 }
+	}
 
 //
 // Interrupt Service Routine for Timer32-1
@@ -144,11 +163,13 @@ void PORT1_IRQHandler(void)
 //
 void Timer32_1_ISR(void)
 {
-	if (LED1_State() == FALSE )
-	{
-		LED1_On();
+	if( Timer1RunningFlag ){
+		if (LED1_State() == FALSE ) // toggle 
+		{
+			LED1_On();
+		}
+		else LED1_Off();
 	}
-	else LED1_Off();
 }
 
 //
@@ -174,12 +195,12 @@ int main(void){
 	uart0_init();
 	uart0_put("\r\nLab5 Timer demo\r\n");
 	// Set the Timer32-2 to 2Hz (0.5 sec between interrupts)
-	//Timer32_1_Init(&Timer32_1_ISR, SystemCoreClock/2, T32DIV1); // initialize Timer A32-1;
+	Timer32_1_Init(&Timer32_1_ISR, SystemCoreClock/2, T32DIV1); // initialize Timer A32-1;
         ;
         
 	// Setup Timer32-2 with a .001 second timeout.
 	// So use DEFAULT_CLOCK_SPEED/(1/0.001) = SystemCoreClock/1000
-	//Timer32_2_Init(&Timer32_2_ISR, SystemCoreClock/1000, T32DIV1); // initialize Timer A32-1;
+	Timer32_2_Init(&Timer32_2_ISR, SystemCoreClock/1000, T32DIV1); // initialize Timer A32-1;
 	;
     
 	Switch1_Interrupt_Init();

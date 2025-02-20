@@ -409,16 +409,6 @@
               <FilePath>.\led.c</FilePath>
             </File>
             <File>
-              <FileName>prelab.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\prelab.c</FilePath>
-            </File>
-            <File>
-              <FileName>main_prt1.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\main_prt1.c</FilePath>
-            </File>
-            <File>
               <FileName>ADC14.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\ADC14.c</FilePath>
@@ -439,16 +429,6 @@
               <FilePath>.\switches.h</FilePath>
             </File>
             <File>
-              <FileName>SysTickTimer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\SysTickTimer.c</FilePath>
-            </File>
-            <File>
-              <FileName>SysTickTimer.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\SysTickTimer.h</FilePath>
-            </File>
-            <File>
               <FileName>Timer32.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Timer32.c</FilePath>
@@ -459,14 +439,24 @@
               <FilePath>.\Timer32.h</FilePath>
             </File>
             <File>
-              <FileName>interrupts.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\interrupts.c</FilePath>
-            </File>
-            <File>
               <FileName>interrupts.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\interrupts.h</FilePath>
+            </File>
+            <File>
+              <FileName>Lab5-Timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Lab5-Timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>CortexM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CortexM.c</FilePath>
+            </File>
+            <File>
+              <FileName>CortexM.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CortexM.h</FilePath>
             </File>
           </Files>
         </Group>

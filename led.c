@@ -1,13 +1,5 @@
 #include "LED.h"
 
-#define RED			BIT0
-#define GREEN 	    BIT1
-#define BLUE		BIT2
-#define CYAN		(GREEN|BLUE)
-#define MAGENTA     (RED|BLUE)
-#define YELLOW	    (RED|GREEN)
-#define WHITE		(RED|GREEN|BLUE)
-
 void LED1_Init(void) {
     P1->SEL0 &= ~BIT0;
     P1->SEL1 &= ~BIT0;
@@ -40,3 +32,32 @@ void LED2_Off(void) {
 void LED1_Off(void) {
     P1->OUT &= ~BIT0;
 }
+
+BOOLEAN LED1_State(void) {
+//static int state = 1; 
+//	
+//  if(state == '1' ){
+//	P2 -> OUT &= ~BIT2;
+//	P2 -> OUT &= ~BIT1;
+//	
+//	P2 -> OUT |= BIT0 ; //Red
+//	
+//	
+//}	else if(state == '3'){
+//	P2 -> OUT &= ~BIT0;
+//	P2 -> OUT &= ~BIT1;
+//	
+//	P2 -> OUT |= BIT2; //Blue
+//	
+//}else if(state == '2'){
+//	P2 -> OUT &= ~BIT0;
+//	P2 -> OUT &= ~BIT2;
+//	P2 -> OUT |= BIT1; //green
+//	
+//}else if(state == '0'){	
+//	P2 -> OUT &= ~BIT0;
+//	P2 -> OUT &= ~BIT2;
+//	P2 -> OUT &= ~BIT1;
+
+}
+
