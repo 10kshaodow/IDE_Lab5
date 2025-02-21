@@ -24,8 +24,8 @@ void LED2_On(BYTE x) {
     P2->OUT |= x; 
 }
 
-void LED2_Off(void) {
-    P2->OUT &= ~BIT2;
+void LED2_Off(BYTE x) {
+    P2->OUT &= ~x;
 }
 
 

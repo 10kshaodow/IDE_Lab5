@@ -147,6 +147,7 @@ void PORT1_IRQHandler(void) // main purpose is to see where the interrupt came f
 			Timer1RunningFlag = FALSE;
 
 		}
+	}
 		// Now check to see if it came from Switch2
   		if(P1->IFG & BIT4)
 		{
@@ -154,23 +155,27 @@ void PORT1_IRQHandler(void) // main purpose is to see where the interrupt came f
 			// clear flag4, acknowledge
 			P1->IFG &= ~BIT4; // clear interrupt flag
 			
-			if(Switch2_Pressed()){
+			if(Timer2RunningFlag == FALSE){
+				
 				colorIndex = (colorIndex + 1) % length;
 				currentcolor = colors[colorIndex];
 				LED2_On(currentcolor);
-				Timer2RunningFlag = TRUE;
+				Timer2RunningFlag = TRUE;   
 			}else{
+				LED2_Off(currentcolor);
 				numSeconds = MillisecondCounter;
 				MillisecondCounter = 0;
+				numSeconds = numSeconds/1000; // might neeed to make for loop in putNumU
 				uart0_put("\r\nSwitch2 was held for: ");
 				uart0_putnumU((int)numSeconds);
 				uart0_put(" Seconds\r\n");
+				
 				Timer2RunningFlag = FALSE;
 
 			}
 	}
-	}
-}
+}		
+
 
 //
 // Interrupt Service Routine for Timer32-1
@@ -218,7 +223,6 @@ int main(void){
 	// Setup Timer32-2 with a .001 second timeout.
 	// So use DEFAULT_CLOCK_SPEED/(1/0.001) = SystemCoreClock/1000
 	Timer32_2_Init(&Timer32_2_ISR, SystemCoreClock/1000, T32DIV1); // initialize Timer A32-1;
-	;
     
 	Switch1_Interrupt_Init();
 	Switch2_Interrupt_Init();
