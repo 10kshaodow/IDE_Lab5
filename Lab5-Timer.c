@@ -64,20 +64,20 @@ void Switch1_Interrupt_Init(void)
 	//0b = No interrupt is pending.
 	//1b = Interrupt is pending.
 	// clear flag1 (reduce possibility of extra interrupt)	
-  ; 
+  	P1->IFG &= ~BIT1; // clear interrupt flag 
 
 	//7-0 PxIE RW 0h Port X interrupt enable
 	//0b = Corresponding port interrupt disabled
 	//1b = Corresponding port interrupt enabled	
 	// arm interrupt on  P1.1	
-  ;  
+  	P1->IE |= BIT1; // enable interrupt 
 
 	//7-0 PxIES RW Undefined Port X interrupt edge select
-  //0b = PxIFG flag is set with a low-to-high transition.
-  //1b = PxIFG flag is set with a high-to-low transition
+  	//0b = PxIFG flag is set with a low-to-high transition.
+  	//1b = PxIFG flag is set with a high-to-low transition
 	// now set the pin to cause falling edge interrupt event
 	// P1.1 is falling edge event
-  ; 
+  	P1->IES |= BIT1; // set interrupt to trigger on falling edge 
 	
 	// now set the pin to cause falling edge interrupt event
   NVIC_IPR8 = (NVIC_IPR8 & 0x00FFFFFF)|0x40000000; // priority 2
@@ -99,13 +99,13 @@ void Switch2_Interrupt_Init(void)
 	
 	// now set the pin to cause falling edge interrupt event
 	// P1.4 is falling edge event
-  ;
+	P1->IES |= BIT4; // set interrupt to trigger on falling edge
   
 	// clear flag4 (reduce possibility of extra interrupt)
-  ; 
+  	P1->IFG &= ~BIT4; // clear interrupt flag 
   
 	// arm interrupt on P1.4 
-  ;     
+	P1->IE |= BIT4; // enable interrupt    
 	
 	// now set the pin to cause falling edge interrupt event
   NVIC_IPR8 = (NVIC_IPR8&0x00FFFFFF)|0x40000000; // priority 2
@@ -128,33 +128,32 @@ void PORT1_IRQHandler(void)
 {
 	float numSeconds = 0.0;
 	char temp[32];
-	
 
-	// First we check if it came from Switch1 ?
-  if(P1->IFG & BIT1)  // we start a timer to toggle the LED1 1 second ON and 1 second OFF
+	// First we check if it came from Switch1
+  	if(P1->IFG & BIT1)  // we start a timer to toggle the LED1 1 second ON and 1 second OFF
 	{
 		// acknowledge P1.1 is pressed, by setting BIT1 to zero - remember P1.1 is switch 1
 		// clear flag, acknowledge
-    P1->IFG &= ~BIT1; // clear interrupt flag
-    //start timer
+    	P1->IFG &= ~BIT1; // clear interrupt flag
+    	//start timer
 		//
-		
 		if(Timer1RunningFlag == FALSE){
 			Timer1RunningFlag = TRUE;
 			
-		}else{
+		}
+		else{
 			Timer1RunningFlag = FALSE;
 
-  }
-	// Now check to see if it came from Switch2 ?
-  if(P1->IFG & BIT4)
-	{
-		// acknowledge P1.4 is pressed, by setting BIT4 to zero - remember P1.4 is switch 2
-    // clear flag4, acknowledge
-		P1->IFG &= ~BIT4; // clear interrupt flag
-  }
-}
+		}
+		// Now check to see if it came from Switch2
+  		if(P1->IFG & BIT4)
+		{
+			// acknowledge P1.4 is pressed, by setting BIT4 to zero - remember P1.4 is switch 2
+			// clear flag4, acknowledge
+			P1->IFG &= ~BIT4; // clear interrupt flag
+		}
 	}
+}
 
 //
 // Interrupt Service Routine for Timer32-1

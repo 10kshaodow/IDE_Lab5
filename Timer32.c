@@ -48,39 +48,46 @@ void Timer32_1_Init(void(*task)(void), unsigned long period, enum timer32divider
 	timer1Period = period;
 	// default MCLK is 3MHz
 	// but set MCLK to 48 MHz
-  sr = StartCritical();
+  	sr = StartCritical();
 	
 	// unsigned long function
-  Timer32_1_PeriodicTask = task;      
+  	Timer32_1_PeriodicTask = task;      
 	
 	// timer reload value
 	// TIMER32_LOAD1
-  ;    
+  	TIMER32_LOAD1 = period;    
 	
 	// clear Timer32 Timer 1 interrupt
 	// TIMER32_INTCLR1
-  ;   
+  	TIMER32_INTCLR1 = 0x01;   
 
 	
-  // bits31-8=X...X,   reserved
-  // bit7,             timer 0=disable, 1=enable
-  // bit6,             0 = Timer is in free-running mode, 1=timer in periodic mode
-  // bit5,             interrupt 0=disable, 1=enable
-  // bit4=X,           reserved
-  // bits3-2=??,       input clock divider according to parameter
-  // bit1,             0=16bit counter, 1=32-bit counter
-  // bit0,             1=one shot mode, 0=wrapping mode
+	// bits31-8=X...X,   reserved
+	// bit7,             timer 0=disable, 1=enable
+	// bit6,             0 = Timer is in free-running mode, 1=timer in periodic mode
+	// bit5,             interrupt 0=disable, 1=enable
+	// bit4=X,           reserved
+	// bits3-2=??,       input clock divider according to parameter
+	// bit1,             0=16bit counter, 1=32-bit counter
+	// bit0,             1=one shot mode, 0=wrapping mode
 	
 	// TIMER32_CONTROL1, enable, periodic, 32 bit counter
-  ;
+  	TIMER32_CONTROL1 |= BIT7; // enable timer
+	TIMER32_CONTROL1 |= BIT6; // periodic mode
+	TIMER32_CONTROL1 |= BIT5; // enable interrupt
+	TIMER32_CONTROL1 |= (div << 2); // set the clock divider
+	TIMER32_CONTROL1 |= BIT1; // 32 bit counter
+	TIMER32_CONTROL1 &= ~BIT0; // wrapping mode
 	
 	// interrupts enabled in the main program after all devices initialized
 	// NVIC_IPR6
-  NVIC_IPR6 = (NVIC_IPR6&0xFFFF00FF)|0x00004000; // priority 2
+  	NVIC_IPR6 = (NVIC_IPR6&0xFFFF00FF)|0x00004000; // priority 2
 	
 	// enable interrupt 25 in NVIC, NVIC_ISER0
 	// NVIC_ISER0
-  ;         
+  	NVIC_ISER0 |= (1 << 25);         
+
+  	EndCritical(sr);
 
   EndCritical(sr);
 }
@@ -91,14 +98,14 @@ void T32_INT1_IRQHandler(void)
 {
 	// acknowledge Timer32 Timer 1 interrupt
 	// TIMER32_INTCLR1
-  ;    
+  	TIMER32_INTCLR1 = 0x01;    
 	
 	// execute user task
-  (*Timer32_1_PeriodicTask)();               
+  	(*Timer32_1_PeriodicTask)();               
 	
 	// timer reload value to start the timer again
 	// TIMER32_LOAD1
-	;    
+	TIMER32_LOAD1 = timer1Period;    
 }
 
 // ***************** Timer32_2_Init ****************
@@ -118,39 +125,44 @@ void Timer32_2_Init(void(*task)(void), unsigned long period, enum timer32divider
 
 	// default MCLK is 3MHz
 	// but set MCLK to 48 MHz
-  sr = StartCritical();
+  	sr = StartCritical();
 	
 	// unsigned long function
 	// assigns the ISR
-  Timer32_2_PeriodicTask = task;      
+  	Timer32_2_PeriodicTask = task;      
 	
 	// timer reload value
 	// TIMER32_LOAD2
-  ;    
+  	TIMER32_LOAD2 = period;    
 	
 	// clear Timer32 Timer 2 interrupt
 	// TIMER32_INTCLR2
-  ;  
+  	TIMER32_INTCLR2 = 0x01;  
 
   
-  // bits31-8=X...X,   reserved
-  // bit7,             timer 0=disable, 1=enable
-  // bit6,             0 = Timer is in free-running mode, 1=timer in periodic mode
-  // bit5,             interrupt 0=disable, 1=enable
-  // bit4=X,           reserved
-  // bits3-2=??,       input clock divider according to parameter
-  // bit1,             0=16bit counter, 1=32-bit counter
-  // bit0,             1=one shot mode, 0=wrapping mode
-	
-  //TIMER32_CONTROL2   
-  ;
+	// bits31-8=X...X,   reserved
+	// bit7,             timer 0=disable, 1=enable
+	// bit6,             0 = Timer is in free-running mode, 1=timer in periodic mode
+	// bit5,             interrupt 0=disable, 1=enable
+	// bit4=X,           reserved
+	// bits3-2=??,       input clock divider according to parameter
+	// bit1,             0=16bit counter, 1=32-bit counter
+	// bit0,             1=one shot mode, 0=wrapping mode
+		
+	//TIMER32_CONTROL2   
+  	TIMER32_CONTROL2 |= BIT7; // enable timer
+	TIMER32_CONTROL2 |= BIT6; // periodic mode
+	TIMER32_CONTROL2 |= BIT5; // enable interrupt
+	TIMER32_CONTROL2 |= (div << 2); // set the clock divider
+	TIMER32_CONTROL2 |= BIT1; // 32 bit counter
+	TIMER32_CONTROL2 &= ~BIT0; // wrapping mode
 
 	// interrupts enabled in the main program after all devices initialized
-  NVIC_IPR6 = (NVIC_IPR6&0xFFFF00FF)|0x00004000; // priority 2
+  	NVIC_IPR6 = (NVIC_IPR6&0xFFFF00FF)|0x00004000; // priority 2
 	
 	// enable interrupt 26 in NVIC, NVIC_ISER0
 	// NVIC_ISER0
-  ;         
+  	NVIC_ISER0 |= (1 << 26);         
 
   EndCritical(sr);
 }
@@ -161,13 +173,13 @@ void T32_INT2_IRQHandler(void)
 {
 	// acknowledge Timer32 Timer 1 interrupt
 	// TIMER32_INTCLR2
-  ;    
+  	TIMER32_INTCLR2 = 0x01;    
 	
 	// execute user task
-  (*Timer32_2_PeriodicTask)();               
+  	(*Timer32_2_PeriodicTask)();               
 	
 	// timer reload value
 	// TIMER32_LOAD2
-	;    
+	TIMER32_LOAD2 = timer2Period;    
 
 }
