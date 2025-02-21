@@ -154,16 +154,25 @@ void PORT1_IRQHandler(void) // main purpose is to see where the interrupt came f
 			// acknowledge P1.4 is pressed, by setting BIT4 to zero - remember P1.4 is switch 2
 			// clear flag4, acknowledge
 			P1->IFG &= ~BIT4; // clear interrupt flag
-			
-			
-			
 			if(Timer2RunningFlag == FALSE){
+				Timer2RunningFlag = TRUE;
+				
+			}else{
+				Timer2RunningFlag = FALSE;
+			}
+
+			
+			while(Timer2RunningFlag == TRUE)
+			{
 				LED2_Off(currentcolor);
 				currentcolor = colors[colorIndex];
 				LED2_On(currentcolor);
+				while (MillisecondCounter % 500 != 0);
 				colorIndex = (colorIndex + 1) % length;
-				Timer2RunningFlag = TRUE;   
-			}else{
+			}
+			
+			if(Timer2RunningFlag == FALSE)
+			{
 				LED2_Off(currentcolor);
 				numSeconds = MillisecondCounter;
 				MillisecondCounter = 0;
@@ -172,8 +181,6 @@ void PORT1_IRQHandler(void) // main purpose is to see where the interrupt came f
 				uart0_putnumU((int)numSeconds);
 				uart0_put(" Seconds\r\n");
 				
-				Timer2RunningFlag = FALSE;
-
 			}
 		
 	}
