@@ -148,7 +148,7 @@ unsigned int  ADC_In(void)
 	// 14 bit sample returned  ADC14->MEM[0]
 	// ADC14->MEM[0] 14-bit conversion in bits 13-0 (31-16 undefined, 15-14 zero)
 	// ADC14->MEM[0]
-	adcIn = ;
+	//adcIn = ;
 		
   return adcIn;                 // 4) return result 0 to 16383
 }
