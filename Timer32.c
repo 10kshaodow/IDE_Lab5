@@ -135,7 +135,7 @@ void Timer32_2_Init(void(*task)(void), unsigned long period, enum timer32divider
 	
 	// clear Timer32 Timer 2 interrupt
 	// TIMER32_INTCLR2
-  	TIMER32_INTCLR2 = 0x01;  
+  	TIMER32_INTCLR2 |= BIT0;  // Stop Timer32-2
 
   
 	// bits31-8=X...X,   reserved
