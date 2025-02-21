@@ -162,27 +162,6 @@ void PORT1_IRQHandler(void) // main purpose is to see where the interrupt came f
 			}
 
 			
-			while(Timer2RunningFlag == TRUE)
-			{
-				LED2_Off(currentcolor);
-				currentcolor = colors[colorIndex];
-				LED2_On(currentcolor);
-				while (MillisecondCounter % 500 != 0);
-				colorIndex = (colorIndex + 1) % length;
-				if(Timer2RunningFlag == FALSE){break;}
-			}
-			
-			if(Timer2RunningFlag == FALSE)
-			{
-				LED2_Off(currentcolor);
-				numSeconds = MillisecondCounter;
-				MillisecondCounter = 0;
-				numSeconds = numSeconds/1000; // might neeed to make for loop in putNumU
-				uart0_put("\r\nSwitch2 was held for: ");
-				uart0_putnumU((int)numSeconds);
-				uart0_put(" Seconds\r\n");
-				
-			}
 		
 	}
 }		
@@ -240,8 +219,31 @@ int main(void){
 	LED1_Init();
 	LED2_Init();
 	EnableInterrupts();
-  while(1)
+	
+  	while(1)
 	{
     WaitForInterrupt();
+	while(Timer2RunningFlag == TRUE)
+	{
+		LED2_Off(currentcolor);
+		currentcolor = colors[colorIndex];
+		LED2_On(currentcolor);
+		while (MillisecondCounter % 500 != 0);
+		colorIndex = (colorIndex + 1) % length;
+		if
+	}
+	
+	if(Timer2RunningFlag == FALSE)
+	{
+		LED2_Off(currentcolor);
+		numSeconds = MillisecondCounter;
+		MillisecondCounter = 0;
+		numSeconds = numSeconds/1000; // might neeed to make for loop in putNumU
+		uart0_put("\r\nSwitch2 was held for: ");
+		uart0_putnumU((int)numSeconds);
+		uart0_put(" Seconds\r\n");
+		
+	}
   }
+  	
 }
