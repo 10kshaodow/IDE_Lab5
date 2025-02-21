@@ -439,11 +439,6 @@
               <FilePath>.\Timer32.h</FilePath>
             </File>
             <File>
-              <FileName>interrupts.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\interrupts.h</FilePath>
-            </File>
-            <File>
               <FileName>Lab5-Timer.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Lab5-Timer.c</FilePath>

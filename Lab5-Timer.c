@@ -35,6 +35,8 @@ BOOLEAN g_sendData = FALSE;
 
 int colorIndex = 0;
 BYTE colors[7] = { RED, GREEN, BLUE, CYAN, MAGENTA, YELLOW, WHITE };
+int length = sizeof(colors)/ sizeof(colors[0]);
+
 
 BOOLEAN Timer1RunningFlag = FALSE;
 BOOLEAN Timer2RunningFlag = FALSE;
@@ -124,10 +126,11 @@ void Switch2_Interrupt_Init(void)
 // Derived From: Jonathan Valvano
 
 
-void PORT1_IRQHandler(void)
+void PORT1_IRQHandler(void) // main purpose is to see where the interrupt came from and we can handle it respective values. 
 {
 	float numSeconds = 0.0;
 	char temp[32];
+	BYTE currentcolor; 
 
 	// First we check if it came from Switch1
   	if(P1->IFG & BIT1)  // we start a timer to toggle the LED1 1 second ON and 1 second OFF
@@ -140,8 +143,7 @@ void PORT1_IRQHandler(void)
 		if(Timer1RunningFlag == FALSE){
 			Timer1RunningFlag = TRUE;
 			
-		}
-		else{
+		}else{
 			Timer1RunningFlag = FALSE;
 
 		}
@@ -151,7 +153,22 @@ void PORT1_IRQHandler(void)
 			// acknowledge P1.4 is pressed, by setting BIT4 to zero - remember P1.4 is switch 2
 			// clear flag4, acknowledge
 			P1->IFG &= ~BIT4; // clear interrupt flag
-		}
+			
+			if(Switch2_Pressed()){
+				colorIndex = (colorIndex + 1) % length;
+				currentcolor = colors[colorIndex];
+				LED2_On(currentcolor);
+				Timer2RunningFlag = TRUE;
+			}else{
+				numSeconds = MillisecondCounter;
+				MillisecondCounter = 0;
+				uart0_put("\r\nSwitch2 was held for: ");
+				uart0_putnumU((int)numSeconds);
+				uart0_put(" Seconds\r\n");
+				Timer2RunningFlag = FALSE;
+
+			}
+	}
 	}
 }
 
@@ -163,7 +180,7 @@ void PORT1_IRQHandler(void)
 void Timer32_1_ISR(void)
 {
 	if( Timer1RunningFlag ){
-		if (LED1_State() == FALSE ) // toggle 
+		if (LED1_State() ) // toggle 
 		{
 			LED1_On();
 		}
@@ -178,8 +195,9 @@ void Timer32_1_ISR(void)
 //
 void Timer32_2_ISR(void)
 {
-
+if( Timer2RunningFlag ){
 		MillisecondCounter++;
+}
 
 }
 

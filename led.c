@@ -20,8 +20,8 @@ void LED1_On(void) {
     P1->OUT |= BIT0; //red
 }
 
-void LED2_On(void) {
-    P2->OUT |= BIT2; //blue
+void LED2_On(BYTE x) {
+    P2->OUT |= x; 
 }
 
 void LED2_Off(void) {
@@ -34,30 +34,12 @@ void LED1_Off(void) {
 }
 
 BOOLEAN LED1_State(void) {
-//static int state = 1; 
-//	
-//  if(state == '1' ){
-//	P2 -> OUT &= ~BIT2;
-//	P2 -> OUT &= ~BIT1;
-//	
-//	P2 -> OUT |= BIT0 ; //Red
-//	
-//	
-//}	else if(state == '3'){
-//	P2 -> OUT &= ~BIT0;
-//	P2 -> OUT &= ~BIT1;
-//	
-//	P2 -> OUT |= BIT2; //Blue
-//	
-//}else if(state == '2'){
-//	P2 -> OUT &= ~BIT0;
-//	P2 -> OUT &= ~BIT2;
-//	P2 -> OUT |= BIT1; //green
-//	
-//}else if(state == '0'){	
-//	P2 -> OUT &= ~BIT0;
-//	P2 -> OUT &= ~BIT2;
-//	P2 -> OUT &= ~BIT1;
+static BOOLEAN state = FALSE; 
 
+    // Toggle the state
+    state = !state;
+    
+    // Return the current state
+    return state;
 }
 
