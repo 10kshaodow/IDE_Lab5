@@ -35,7 +35,8 @@ BOOLEAN g_sendData = FALSE;
 
 int colorIndex = 0;
 BYTE colors[7] = { RED, GREEN, BLUE, CYAN, MAGENTA, YELLOW, WHITE };
-int length = sizeof(colors)/ sizeof(colors[0]);
+int length = 7;
+BYTE currentcolor;
 
 
 BOOLEAN Timer1RunningFlag = FALSE;
@@ -130,7 +131,6 @@ void PORT1_IRQHandler(void) // main purpose is to see where the interrupt came f
 {
 	float numSeconds = 0.0;
 	char temp[32];
-	BYTE currentcolor; 
 
 	// First we check if it came from Switch1
   	if(P1->IFG & BIT1)  // we start a timer to toggle the LED1 1 second ON and 1 second OFF
@@ -156,10 +156,10 @@ void PORT1_IRQHandler(void) // main purpose is to see where the interrupt came f
 			P1->IFG &= ~BIT4; // clear interrupt flag
 			
 			if(Timer2RunningFlag == FALSE){
-				
-				colorIndex = (colorIndex + 1) % length;
+				LED2_Off(currentcolor);
 				currentcolor = colors[colorIndex];
 				LED2_On(currentcolor);
+				colorIndex = (colorIndex + 1) % length;
 				Timer2RunningFlag = TRUE;   
 			}else{
 				LED2_Off(currentcolor);
@@ -173,6 +173,7 @@ void PORT1_IRQHandler(void) // main purpose is to see where the interrupt came f
 				Timer2RunningFlag = FALSE;
 
 			}
+		
 	}
 }		
 
@@ -203,6 +204,7 @@ void Timer32_2_ISR(void)
 if( Timer2RunningFlag ){
 		MillisecondCounter++;
 }
+	
 
 }
 
