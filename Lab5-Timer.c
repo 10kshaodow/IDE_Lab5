@@ -155,6 +155,8 @@ void PORT1_IRQHandler(void) // main purpose is to see where the interrupt came f
 			// clear flag4, acknowledge
 			P1->IFG &= ~BIT4; // clear interrupt flag
 			
+			
+			
 			if(Timer2RunningFlag == FALSE){
 				LED2_Off(currentcolor);
 				currentcolor = colors[colorIndex];
@@ -205,7 +207,6 @@ if( Timer2RunningFlag ){
 		MillisecondCounter++;
 }
 	
-
 }
 
 
