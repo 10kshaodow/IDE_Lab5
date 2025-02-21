@@ -169,6 +169,7 @@ void PORT1_IRQHandler(void) // main purpose is to see where the interrupt came f
 				LED2_On(currentcolor);
 				while (MillisecondCounter % 500 != 0);
 				colorIndex = (colorIndex + 1) % length;
+				if(Timer2RunningFlag == FALSE){break;}
 			}
 			
 			if(Timer2RunningFlag == FALSE)
