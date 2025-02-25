@@ -130,53 +130,63 @@ void Switch2_Interrupt_Init(void)
 
 void PORT1_IRQHandler(void) // main purpose is to see where the interrupt came from and we can handle it respective values. 
 {
-	
-	char temp[32];
+	//Part 1
+	// char temp[32];
 
-	// First we check if it came from Switch1
-  	if(P1->IFG & BIT1)  // we start a timer to toggle the LED1 1 second ON and 1 second OFF
-	{
-		// acknowledge P1.1 is pressed, by setting BIT1 to zero - remember P1.1 is switch 1
-		// clear flag, acknowledge
-    	P1->IFG &= ~BIT1; // clear interrupt flag
-    	//start timer
-		//
-		if(Timer1RunningFlag == FALSE){
-			Timer1RunningFlag = TRUE;
+	// // First we check if it came from Switch1
+  	// if(P1->IFG & BIT1)  // we start a timer to toggle the LED1 1 second ON and 1 second OFF
+	// {
+	// 	// acknowledge P1.1 is pressed, by setting BIT1 to zero - remember P1.1 is switch 1
+	// 	// clear flag, acknowledge
+    // 	P1->IFG &= ~BIT1; // clear interrupt flag
+    // 	//start timer
+	// 	//
+	// 	if(Timer1RunningFlag == FALSE){
+	// 		Timer1RunningFlag = TRUE;
 			
-		}else{
-			Timer1RunningFlag = FALSE;
+	// 	}else{
+	// 		Timer1RunningFlag = FALSE;
 
-		}
-	}
-		// Now check to see if it came from Switch2
-  		if(P1->IFG & BIT4)
-		{
-			// acknowledge P1.4 is pressed, by setting BIT4 to zero - remember P1.4 is switch 2
-			// clear flag4, acknowledge
-			P1->IFG &= ~BIT4; // clear interrupt flag
-			if(Timer2RunningFlag == FALSE){
-				Timer2RunningFlag = TRUE;
+	// 	}
+	// }
+	// 	// Now check to see if it came from Switch2
+  	// 	if(P1->IFG & BIT4)
+	// 	{
+	// 		// acknowledge P1.4 is pressed, by setting BIT4 to zero - remember P1.4 is switch 2
+	// 		// clear flag4, acknowledge
+	// 		P1->IFG &= ~BIT4; // clear interrupt flag
+	// 		if(Timer2RunningFlag == FALSE){
+	// 			Timer2RunningFlag = TRUE;
 				
-			}else{
-				Timer2RunningFlag = FALSE;
-			}
+	// 		}else{
+	// 			Timer2RunningFlag = FALSE;
+	// 		}
 			
-	if(Timer2RunningFlag == FALSE)
-	{
-		LED2_Off(currentcolor);
-		numSeconds = MillisecondCounter;
-		MillisecondCounter = 0;
-		numSeconds = numSeconds/1000; // might neeed to make for loop in putNumU
+	// if(Timer2RunningFlag == FALSE)
+	// {
+	// 	LED2_Off(currentcolor);
+	// 	numSeconds = MillisecondCounter;
+	// 	MillisecondCounter = 0;
+	// 	numSeconds = numSeconds/1000; // might neeed to make for loop in putNumU
 	
-		sprintf(temp, "\r\nSwitch2 was held for: %.2f Seconds\r\n", numSeconds);
-		 uart0_put(temp);
+	// 	sprintf(temp, "\r\nSwitch2 was held for: %.2f Seconds\r\n", numSeconds);
+	// 	 uart0_put(temp);
 		
-	}
+	// }	
+	// }
 
-			
-		
-	}
+	//Part 2
+	if(P1->IFG & BIT1)
+	{
+        P1->IFG &= ~BIT1;
+        Timer1RunningFlag = !Timer1RunningFlag;
+    }
+	
+	if(P1->IFG & BIT4)
+	{
+        P1->IFG &= ~BIT4;
+        Timer2RunningFlag = !Timer2RunningFlag;
+    }
 }		
 
 
