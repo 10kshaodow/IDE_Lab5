@@ -7,7 +7,7 @@
 #include "ADC14.h"
 
 
-#include "Leds.h"
+#include "led.h"
 extern uint32_t SystemCoreClock;
 
 // default SI integration time is 7.5ms = 133Hz

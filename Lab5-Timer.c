@@ -19,11 +19,11 @@
 #include "Common.h"
 
 #define RED			BIT0
-#define GREEN 	    BIT1
+#define GREEN 	BIT1
 #define BLUE		BIT2
 #define CYAN		(GREEN|BLUE)
-#define MAGENTA     (RED|BLUE)
-#define YELLOW	    (RED|GREEN)
+#define MAGENTA (RED|BLUE)
+#define YELLOW	(RED|GREEN)
 #define WHITE		(RED|GREEN|BLUE)
 
 extern uint32_t SystemCoreClock;
@@ -173,8 +173,6 @@ void PORT1_IRQHandler(void) // main purpose is to see where the interrupt came f
 		 uart0_put(temp);
 		
 	}
-
-			
 		
 	}
 }		
@@ -238,10 +236,10 @@ int main(void){
   	while(1)
 	{
     WaitForInterrupt();
-				if(Timer2RunningFlag == TRUE){
+		if(Timer2RunningFlag == TRUE){
 			LED2_Off(currentcolor);
-		currentcolor = colors[colorIndex];
-		LED2_On(currentcolor);
+			currentcolor = colors[colorIndex];
+			LED2_On(currentcolor);
 		while (MillisecondCounter % 500 != 0);
 		colorIndex = (colorIndex + 1) % length;
 		}

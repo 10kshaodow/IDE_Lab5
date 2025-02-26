@@ -453,6 +453,36 @@
               <FileType>5</FileType>
               <FilePath>.\CortexM.h</FilePath>
             </File>
+            <File>
+              <FileName>Lab5-ADC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Lab5-ADC.c</FilePath>
+            </File>
+            <File>
+              <FileName>Lab5-Camera.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Lab5-Camera.c</FilePath>
+            </File>
+            <File>
+              <FileName>SysTickTimer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\SysTickTimer.c</FilePath>
+            </File>
+            <File>
+              <FileName>SysTickTimer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\SysTickTimer.h</FilePath>
+            </File>
+            <File>
+              <FileName>ControlPins.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\ControlPins.c</FilePath>
+            </File>
+            <File>
+              <FileName>ControlPins.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\ControlPins.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
