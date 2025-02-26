@@ -13,12 +13,16 @@ extern uint32_t SystemCoreClock;
 // default SI integration time is 7.5ms = 133Hz
 //
 #define INTEGRATION_TIME .0075f
-
+#define SI_PIN   BIT5  // P5.5 for SI
+#define CLK_PIN  BIT4  // P5.4 for CLK
+#define SI_PORT  P5
+#define CLK_PORT P5
+#define DELAY_SIZE (1 << 3)
 
 
 // default CLK frequency of the camera 180KHz (assume 48MHz clock)
 // NOTE: we have to double 50000, because we need a clock for the rising edge and one for the falling edge.
-//#define HIGH_CLOCK_SPEED 48000000
+#define HIGH_CLOCK_SPEED 48000000
 
 #define CLK_PERIOD ((double)SystemCoreClock/180000.0) 
 
@@ -31,8 +35,8 @@ extern uint32_t SystemCoreClock;
 unsigned long tempCounter = 0;
 static long pixelCounter = 0;
 
-extern uint16_t line[128];
-extern BOOLEAN g_sendData;
+uint16_t line[128];
+BOOLEAN g_sendData;
 
 
 ////////////////////////////////////////////
@@ -43,12 +47,24 @@ extern BOOLEAN g_sendData;
 void SI_Handler(void)
 {
 	// the clock could stop when its high, so check on that
-	if ((P5->OUT & CLK) != 0)
+	if ((P5->OUT & CLK) != 0){
 		P5->OUT &= ~CLK; // set the clock low in case it was high.
 	// Read the TSL1401 instructions for SI, CLCK to start the data transfer process
-
+	}
 	// OK, Data should be ready to clock out, so start the clock
 	// Start the clock after we issues a SI pulse.
+		
+
+		SI_PORT->OUT |= SI_PIN;
+    
+    // Set CLK high
+    CLK_PORT->OUT |= CLK_PIN;
+    // Set SI low
+    SI_PORT->OUT &= ~SI_PIN;
+    // Set CLK low
+    CLK_PORT->OUT &= ~CLK_PIN;
+    
+	// Clock data out                  
 	EnableSysTickTimer();                            
 }
 
@@ -70,13 +86,14 @@ void ControlPin_SI_Init()
 	// Go with 50Hz for now - integration period of 20ms
 	unsigned long period = CalcPeriodFromFrequency (1.0/(double)INTEGRATION_TIME);
 	// initialize P5.5 and make it output (P5.5 SI Pin)
-		SI_PORT->SEL0 &= ~(SI_PIN);
-		SI_PORT->SEL1 &= ~(SI_PIN);
-		SI_PORT->DIR |= SI_PIN;
-		SI_PORT->OUT &= ~SI_PIN;
+	SI_PORT->SEL0 &= ~(SI_PIN);
+	SI_PORT->SEL1 &= ~(SI_PIN);
+	SI_PORT->DIR |= SI_PIN;
+	SI_PORT->OUT &= ~(SI_PIN);
 	
     // start Timer
 	Timer32_1_Init(*SI_Handler, period, T32DIV1);
+	
 }
 
 //////////////////////////////////////////
@@ -91,7 +108,10 @@ void ControlPin_CLK_Init()
 	// use 200000 to make a 100K clock, 1 interrupt for each edge
 	unsigned long period = CalcPeriodFromFrequency (200000);
 	// initialize P5.4 and make it output (P5.4 CLK Pin)
-
+	CLK_PORT->SEL0 &= ~(CLK_PIN);
+	CLK_PORT->SEL1 &= ~(CLK_PIN);
+	CLK_PORT->DIR |= CLK_PIN;
+  CLK_PORT->OUT &= ~CLK_PIN;
 
 
 	// if the period is based on a 48MHz clock, each tick would be 20.83 ns

@@ -439,11 +439,6 @@
               <FilePath>.\Timer32.h</FilePath>
             </File>
             <File>
-              <FileName>Lab5-Timer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Lab5-Timer.c</FilePath>
-            </File>
-            <File>
               <FileName>CortexM.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\CortexM.c</FilePath>
@@ -452,11 +447,6 @@
               <FileName>CortexM.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\CortexM.h</FilePath>
-            </File>
-            <File>
-              <FileName>Lab5-ADC.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Lab5-ADC.c</FilePath>
             </File>
             <File>
               <FileName>Lab5-Camera.c</FileName>
