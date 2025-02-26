@@ -70,6 +70,10 @@ void ControlPin_SI_Init()
 	// Go with 50Hz for now - integration period of 20ms
 	unsigned long period = CalcPeriodFromFrequency (1.0/(double)INTEGRATION_TIME);
 	// initialize P5.5 and make it output (P5.5 SI Pin)
+		SI_PORT->SEL0 &= ~(SI_PIN);
+		SI_PORT->SEL1 &= ~(SI_PIN);
+		SI_PORT->DIR |= SI_PIN;
+		SI_PORT->OUT &= ~SI_PIN;
 	
     // start Timer
 	Timer32_1_Init(*SI_Handler, period, T32DIV1);
